@@ -45,11 +45,14 @@ aoi <-
 pop <-
   sf::st_read(system.file("example.gpkg", package = "drtplanr"), layer = "pop")
 
+poi <-
+  sf::st_read(system.file("example.gpkg", package = "drtplanr"), layer = "poi")[1,]
+
 # Create model
 m <- drt_drtm(
-  model_name = "Jegenstorf",
-  aoi = aoi, pop = pop,
-  n_sta = 10, m_seg = 100
+  model_name = "BÃ¼lach",
+  aoi = aoi, pop = pop, poi = poi,
+  n_sta = 15, m_seg = 100
 )
 m
 }

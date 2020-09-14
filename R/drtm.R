@@ -27,11 +27,14 @@
 #' pop <-
 #'   sf::st_read(system.file("example.gpkg", package = "drtplanr"), layer = "pop")
 #'
+#' poi <-
+#'   sf::st_read(system.file("example.gpkg", package = "drtplanr"), layer = "poi")[1,]
+#'
 #' # Create model
 #' m <- drt_drtm(
-#'   model_name = "Jegenstorf",
-#'   aoi = aoi, pop = pop,
-#'   n_sta = 10, m_seg = 100
+#'   model_name = "Bülach",
+#'   aoi = aoi, pop = pop, poi = poi,
+#'   n_sta = 15, m_seg = 100
 #' )
 #' m
 drt_drtm <- function(model_name, aoi, pop, n_sta, poi = NULL, m_seg = 100,
@@ -300,26 +303,11 @@ drt_route_matrix <- function(orig, dest, graph) {
 
 #' Global energy of the model
 #'
-#' Energy function that calculates the global energy of the model by summing
-#' product of the attractivities of each origin and destination station pair
-#' weighted by their connectivity (bicycle time between the stations).
-#'
-#' Notation:
-#' \itemize{
-#'  \item{Ps_i: }{Sum of population in catchment area of station i.}
-#'  \item{WTs_i: }{Sum of the walking time of population in catchment area to station i.}
-#'  \item{BTs_i_s_j: }{Bicycle time from station i to station j.}
-#'  \item{LEs_i = Ps_i * WTs_i: }{Local energy of station i.}
-#' }
-#'
-#' Terms:
-#' \itemize{
-#'  \item{s1 = }{sum(Ps_i * LEs_i)}
-#'  \item{s2 = }{sum(Ps_i * BTs_i_s_j * Ps_j)}
-#'  \item{s3 = }{sum(Ps_j * LEs_j)}
-#' }
-#'
-#' Global energy: e_g = sum(s1 + s2 + s3)
+#' Energy function that calculates the global energy of the model. The energy
+#' quantifies the duration of all origin destination travels by bicycle (walk
+#' to station, cycle, walk from station) or alternatively the direct walking
+#' travel if it is faster. The travels are weighted by the origin and
+#' destination population.
 #'
 #' @param idx numeric, indices of candidates ins 'seg'.
 #' @param seg sf, road segments point locations.
@@ -333,43 +321,56 @@ drt_route_matrix <- function(orig, dest, graph) {
 #' @export
 #'
 #' @examples
-#' print("tbd.")
+#' # Example model
+#' m <- drt_import(
+#'   system.file("Jegenstorf_i1000.RData", package = "drtplanr")
+#' )
+#'
+#' # Get variables
+#' idx = m$idx
+#' seg = m$layer$seg
+#' pop = m$layer$pop
+#' walk = m$route$walk
+#' bicy = m$route$bicy
+#'
+#' # Global energy
+#' calculate_energy(idx, seg, pop, walk, bicy)
 calculate_energy <- function(idx, seg, pop, walk, bicy) {
 
-  # rts_walk: Station to Pop
+  # Walking time from population to station, service area per station
   rts_walk <- drt_route_matrix(seg[idx, ], pop, graph = walk)
-  colnames(rts_walk) <- c("station", "raster", "walking_time")
-  # rts_bicy: Station to station
+  colnames(rts_walk) <- c("station", "cent", "walking_time")
+  #rts_walk[walking_time > 7, walking_time := walking_time^2]
+  nn <- rts_walk[, .SD[which.min(walking_time)], by = list(cent)]
+  nn$population <- pop[nn$cent, ]$n
+
+  # Bicycle time between the stations
   rts_bicy <- drt_route_matrix(seg[idx, ], seg[idx, ], graph = bicy)
-  colnames(rts_bicy) <- c("station_1", "station_2", "bicycle_time")
+  colnames(rts_bicy) <- c("station1", "station2", "bicycle_time")
+  rts_bicy[
+    is.na(rts_bicy$bicycle_time),
+    bicycle_time := max(rts_bicy$bicycle_time, na.rm = TRUE)*2]
+  #rts_bicy[bicycle_time < 3, bicycle_time := 3]
 
-  # Ps_i and LEs_i: Local energy
-  nn <- rts_walk[, .SD[which.min(walking_time)], by = list(raster)]
-  nn$population <- pop[nn$raster, ]$n
-  local_params <- nn[, list(population = sum(population), e_local = sum(population * walking_time)), by = list(station)]
+  # All OD relations
+  od <- drt_route_matrix(pop, pop, graph = walk)
+  colnames(od) <- c("cent1", "cent2", "walking_time")
+  od <- od[cent1 != cent2, ]
+  od[,
+     c("pop1", "pop2", "station1", "station2", "walk_to_s1", "walk_to_s2") := .(
+       pop$n[cent1],
+       pop$n[cent2],
+       nn$station[cent1],
+       nn$station[cent2],
+       nn$walking_time[cent1],
+       nn$walking_time[cent2])]
+  od <- merge(od, rts_bicy, by = c("station1", "station2"))
 
-  # Remove NAs
-  rts_bicy[is.na(rts_bicy$bicycle_time), bicycle_time := max(rts_bicy$bicycle_time, na.rm = TRUE)*2]
+  # Travel time for every pair
+  od[, travel_time := walk_to_s1 + bicycle_time + walk_to_s2]
+  od[walking_time < travel_time, travel_time := walking_time]
 
-  # Global energy
-  tmp <- merge(
-    rts_bicy,
-    local_params,
-    by.x = "station_1", by.y = "station")
-  colnames(tmp) <- c("station_1","station_2", "bicycle_time", "population_1", "e_local_1")
-  global <- merge(
-    tmp,
-    local_params,
-    by.x = "station_2", by.y = "station")
-  colnames(global) <- c("station_1","station_2", "bicycle_time", "population_1", "e_local_1", "population_2", "e_local_2")
-  global[, c("s1", "s2", "s3") := list(
-    population_1 * e_local_1,
-    bicycle_time * population_1 * population_2,
-    population_2 * e_local_2)]
-  global[, s4 := s1 + s2 + s3]
-  global <- global[station_1 != station_2, ]
-
-  return(sum(global$s4))
+  return(od[, sum(pop1 * pop2 * (travel_time))])
 }
 
 
@@ -463,26 +464,20 @@ drt_summary = function(obj, walking_limit = 10) UseMethod("drt_summary")
 
 #' @export
 drt_summary.drtm = function(obj, walking_limit = 10) {
-
   div <- "========================================"
-
   # Walking times from population to stations
   rts_walk <- drt_route_matrix(
     obj$layer$seg[obj$idx, ], obj$layer$pop, graph = obj$route$walk
   )
   colnames(rts_walk) <- c("station", "raster", "walking_time")
   nn <- rts_walk[, .SD[which.min(walking_time)], by = list(raster)]
-  nn$population <- pop[nn$raster, ]$n
-
+  nn$population <- obj$layer$pop[nn$raster, ]$n
   # Population
   n_pop <- sum(obj$layer$pop$n)
-
   # Mean walking time to station
   mean_walking_time <- sum((nn$walking_time * nn$population)) / sum(nn$population)
-
   # Number of persons above and below limit
   limit_walking_time <- nn[, list(n = sum(population)), by = list(walking_time > walking_limit)]
-
   # Bicycling times from station to station
   rts_bicy <- drt_route_matrix(
     obj$layer$seg[obj$idx, ], obj$layer$seg[obj$idx, ], graph = obj$route$bicy
@@ -490,12 +485,9 @@ drt_summary.drtm = function(obj, walking_limit = 10) {
   colnames(rts_bicy) <- c("station_1", "station_2", "bicycle_time")
   rts_bicy[is.na(rts_bicy$bicycle_time), bicycle_time := max(rts_bicy$bicycle_time, na.rm = TRUE)]
   rts_bicy <- rts_bicy[station_1!= station_2, ]
-
   # Near stations
   mean_bicycle_time <- rts_bicy[, list(
     mn = min(bicycle_time), me = mean(bicycle_time), mx = max(bicycle_time))]
-
-  # Population
   "%s%s\nSummary of model '%s'
 ________________________________________________________________________________
 Model energy                        : %.1f
