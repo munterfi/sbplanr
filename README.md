@@ -18,7 +18,7 @@ The model in the package example optimizes the positions of stations in an assum
 Install the development version from [GitHub](https://github.com/munterfinger/drtplanr/) with:
 
 ``` r
-remotes::install_github("munterfinger/drtplanr")
+remotes::install_github("munterfinger/drtplanr@feature/monamo")
 ```
 
 Create an example model:
