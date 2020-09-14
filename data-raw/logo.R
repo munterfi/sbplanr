@@ -24,7 +24,7 @@ color3 <- "#FFFFFF"
 
 # Load model
 m <- drt_import(
-  system.file("Jegenstorf_i1000.RData", package = "drtplanr")
+  system.file("example_i1000.RData", package = "drtplanr")
 )
 
 # Bounding box for plot

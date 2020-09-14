@@ -18,7 +18,7 @@ set.seed(123)
 
 # Example data
 poi <-
-  sf::st_read(system.file("example.gpkg", package = "drtplanr"), layer = "poi")
+  sf::st_read(system.file("example.gpkg", package = "drtplanr"), layer = "poi")[1, ]
 
 aoi <-
   sf::st_read(system.file("example.gpkg", package = "drtplanr"), layer = "aoi")
@@ -30,7 +30,7 @@ pop <-
 m <- drt_drtm(
   model_name = "example",
   aoi = aoi, poi = poi, pop = pop,
-  n_vir = 20, m_seg = 100
+  n_sta = 15, m_seg = 100
 )
 m
 
