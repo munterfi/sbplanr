@@ -2,7 +2,7 @@ test_that("drtm works", {
   # Example data
   poi <-
     sf::st_read(system.file("example.gpkg", package = "drtplanr"),
-                layer = "poi", quiet = TRUE)
+                layer = "poi", quiet = TRUE)[1, ]
   aoi <-
     sf::st_read(system.file("example.gpkg", package = "drtplanr"),
                 layer = "aoi", quiet = TRUE)
@@ -14,15 +14,16 @@ test_that("drtm works", {
   m <- drt_drtm(
     model_name = "example",
     aoi = aoi, poi = poi, pop = pop,
-    n_vir = 21, m_seg = 100
+    n_sta = 15, m_seg = 100
   )
+  m
+  drt_summary(m)
 
   # Test drtm class
   expect_is(m, "drtm")
   expect_equal(length(m), 9)
 
-  # Iterate model with different energy
-  m$params$calc_energy <- e_walk_pop
+  # Iterate model
   m <- drt_iterate(m, 10)
 
   # Test iteration
