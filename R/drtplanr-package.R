@@ -24,7 +24,7 @@ magrittr::`%>%`
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage(
     sprintf(
-      "drtplanr %s: Experimental demand-responsive transport planner\nCopyright (C) 2020 Merlin Unterfinger <info@munterfinger.ch>",
+      "drtplanr %s: Experimental station-based bicycle sharing planner",
       utils::packageVersion("drtplanr")
     )
   )

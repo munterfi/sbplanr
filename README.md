@@ -1,4 +1,4 @@
-# Station-based sharing planner <img src="man/figures/logo.svg" align="right" alt="" width="120" />
+# Station-based bicycle sharing planner <img src="man/figures/logo.svg" align="right" alt="" width="120" />
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![R build status](https://github.com/munterfinger/drtplanr/workflows/R-CMD-check/badge.svg)](https://github.com/munterfinger/drtplanr/actions)
@@ -66,14 +66,14 @@ The model is set up with the following inputs:
 
 Function that calculates the global energy of the current model state. The aim is to place the station in a way, that the residents and workers around them have to walk as short as possible to the station and that the station is connected as well as possible to other attractive stations in the network. An attractive station is a station with many people in the catchment area that can be quickly reached by bicycle.
 
-$$Eg = \sum_{s_1 \neq s_2} \sum_{c \in S_1} \sum_{d \in S_2} P_c * P_d * (Wt_{c} + Bt_{s1s2} + Wt_d) $$
+<img src="https://render.githubusercontent.com/render/math?math=Eg = \sum_{s_1 \neq s_2} \sum_{c \in S_1} \sum_{d \in S_2} P_c * P_d * (Wt_{c} + Bt_{s1s2} + Wt_d)">
 
 When the direct walking time between to populations is faster than the travel using the bicycle (walk to station, cycle, walk from station), than the direct walking travel is chosen.
 
 ### Optimization
 The global energy of the model is optimized in iterations. In every iteration one station is randomly selected and moved to another position on the segmented street network. The global energy of the model state with the new candidate is calculated. If the global energy is lower as befor, the candidate is accepted and the next iteration starts. If the global energy is higher, the candidate is rejected with the probability $1-\alpha$. The probability $\alpha$ decreases exponentially as a function of the number of iterations ($i$):
 
-$$f(i) = \frac{1}{(i + 1)}$$
+<img src="https://render.githubusercontent.com/render/math?math=f(i) = \frac{1}{(i + 1)}">
 
 The concept of sometimes allowing a bad candidate to be accepted is known as annealing. This technique prevents the optimization from being captured in a local minimum before the global minimum is reached.
 
