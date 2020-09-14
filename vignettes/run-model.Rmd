@@ -61,7 +61,7 @@ Create a new demand reponsive transport model for the aoi 'Jegenstorf', with 10 
 m <- drt_drtm(
   model_name = "example",
   aoi = aoi, poi = poi, pop = pop,
-  n_vir = 20, m_seg = 100
+  n_sta = 20, m_seg = 100
 )
 m
 ```
