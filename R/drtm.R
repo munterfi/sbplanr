@@ -615,7 +615,7 @@ drt_energy.drtm = function(x) {
 #' )
 #'
 #' # Export to temporary dir
-#' drt_export(m, path = tempdir())
+#' #drt_export(m, path = tempdir())
 #' }
 drt_export = function(obj, path) UseMethod("drt_export")
 
@@ -702,7 +702,7 @@ drt_plot <- function(obj) {
 #'   system.file("example_i1000.RData", package = "drtplanr")
 #' )
 #'
-#' drt_map(m)
+#' #drt_map(m)
 drt_map = function(obj) UseMethod("drt_map")
 
 #' @export
