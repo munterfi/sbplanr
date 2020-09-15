@@ -20,7 +20,7 @@ Set energy function
 \examples{
 # Example model
 m <- drt_import(
-  system.file("Jegenstorf_i1000.RData", package = "drtplanr")
+  system.file("example_i1000.RData", package = "drtplanr")
 )
 
 drt_energy(m) <- calculate_energy

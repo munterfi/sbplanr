@@ -8,7 +8,7 @@
 #'
 #' @param model_name character, name of the drtm.
 #' @param aoi sf, polygon of the Area of Interest (AOI).
-#' @param aoi sf, locations of the Points of Interest (POI), fixed stations (default = NULL).
+#' @param poi sf, locations of the Points of Interest (POI), fixed stations (default = NULL).
 #' @param pop sf, centroids of a hectaraster population dataset covering the full extent of the 'aoi' input (column name for population must be 'n').
 #' @param n_sta numeric, number of the stations to place.
 #' @param m_seg numeric, resolution of the road segmentation in meters.
@@ -139,7 +139,7 @@ drt_drtm <- function(model_name, aoi, pop, n_sta, poi = NULL, m_seg = 100,
 #' @examples
 #' # Example model
 #' m <- drt_import(
-#'   system.file("Jegenstorf_i1000.RData", package = "drtplanr")
+#'   system.file("example_i1000.RData", package = "drtplanr")
 #' )
 #' print(m)
 print.drtm <- function(x, ...) {
@@ -323,7 +323,7 @@ drt_route_matrix <- function(orig, dest, graph) {
 #' @examples
 #' # Example model
 #' m <- drt_import(
-#'   system.file("Jegenstorf_i1000.RData", package = "drtplanr")
+#'   system.file("example_i1000.RData", package = "drtplanr")
 #' )
 #'
 #' # Get variables
@@ -391,7 +391,7 @@ calculate_energy <- function(idx, seg, pop, walk, bicy) {
 #' @examples
 #' # Example model
 #' m <- drt_import(
-#'   system.file("Jegenstorf_i1000.RData", package = "drtplanr")
+#'   system.file("example_i1000.RData", package = "drtplanr")
 #' )
 #'
 #' drt_iterate(m, 10)
@@ -427,7 +427,7 @@ drt_iterate.drtm <- function(obj, n_iter, annealing = TRUE) {
                 i - 1, round(e_old, 1), round(e_new, 1)))
     if (e_old > e_new) {
       obj$e[i, ]$value <- e_new
-    } else if (rbinom(n = 1, size = 1, prob = alpha(i))) {
+    } else if (stats::rbinom(n = 1, size = 1, prob = alpha(i))) {
       print("Annealing!")
       obj$e[i, ]$value <- e_new
     } else {
@@ -443,23 +443,23 @@ drt_iterate.drtm <- function(obj, n_iter, annealing = TRUE) {
   obj
 }
 
-#' Reset the model state
+#' Print a summary of the model performance
 #'
 #' @param obj, drtm, a drtm model.
-#' @param shuffle, boolean, shuffle the initial station positions?
+#' @param walking_limit, numeric, walking time limit in minutes to split the summary.
 #'
 #' @return
-#' The energy function of the model.
+#' None.
 #'
 #' @export
 #'
 #' @examples
 #' # Example model
 #' m <- drt_import(
-#'   system.file("Jegenstorf_i1000.RData", package = "drtplanr")
+#'   system.file("example_i1000.RData", package = "drtplanr")
 #' )
 #'
-#' drt_energy(m)
+#' drt_summary(m)
 drt_summary = function(obj, walking_limit = 10) UseMethod("drt_summary")
 
 #' @export
@@ -519,7 +519,7 @@ Station connectivity, cycling time  : %.2f (avg.) [min]
 #' @examples
 #' # Example model
 #' m <- drt_import(
-#'   system.file("Jegenstorf_i1000.RData", package = "drtplanr")
+#'   system.file("example_i1000.RData", package = "drtplanr")
 #' )
 #'
 #' drt_reset(m)
@@ -559,7 +559,7 @@ drt_reset.drtm = function(obj, n_sta = NULL, shuffle = FALSE) {
 #' @examples
 #' # Example model
 #' m <- drt_import(
-#'   system.file("Jegenstorf_i1000.RData", package = "drtplanr")
+#'   system.file("example_i1000.RData", package = "drtplanr")
 #' )
 #'
 #' drt_energy(m)
@@ -583,7 +583,7 @@ drt_energy.drtm = function(x) {
 #' @examples
 #' # Example model
 #' m <- drt_import(
-#'   system.file("Jegenstorf_i1000.RData", package = "drtplanr")
+#'   system.file("example_i1000.RData", package = "drtplanr")
 #' )
 #'
 #' drt_energy(m) <- calculate_energy
@@ -611,7 +611,7 @@ drt_energy.drtm = function(x) {
 #' \donttest{
 #' # Example model
 #' m <- drt_import(
-#'   system.file("Jegenstorf_i1000.RData", package = "drtplanr")
+#'   system.file("example_i1000.RData", package = "drtplanr")
 #' )
 #'
 #' # Export to temporary dir
@@ -638,7 +638,7 @@ drt_export.drtm <- function(obj, path) {
 #' @examples
 #' # Example model
 #' m <- drt_import(
-#'   system.file("Jegenstorf_i1000.RData", package = "drtplanr")
+#'   system.file("example_i1000.RData", package = "drtplanr")
 #' )
 drt_import = function(file_name) UseMethod("drt_import")
 
@@ -664,7 +664,7 @@ drt_import.character <- function(file_name) {
 #' @examples
 #' # Example model
 #' m <- drt_import(
-#'   system.file("Jegenstorf_i1000.RData", package = "drtplanr")
+#'   system.file("example_i1000.RData", package = "drtplanr")
 #' )
 #'
 #' # Plot
@@ -699,7 +699,7 @@ drt_plot <- function(obj) {
 #' @examples
 #' # Example model
 #' m <- drt_import(
-#'   system.file("Jegenstorf_i1000.RData", package = "drtplanr")
+#'   system.file("example_i1000.RData", package = "drtplanr")
 #' )
 #'
 #' drt_map(m)
@@ -755,7 +755,7 @@ drt_map.drtm <- function(obj) {
 #' @examples
 #' #' # Example model
 #' m <- drt_import(
-#'   system.file("Jegenstorf_i1000.RData", package = "drtplanr")
+#'   system.file("example_i1000.RData", package = "drtplanr")
 #' )
 #'
 #' # Save to temp dir

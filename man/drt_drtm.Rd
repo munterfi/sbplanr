@@ -17,11 +17,13 @@ drt_drtm(
 \arguments{
 \item{model_name}{character, name of the drtm.}
 
-\item{aoi}{sf, locations of the Points of Interest (POI), fixed stations (default = NULL).}
+\item{aoi}{sf, polygon of the Area of Interest (AOI).}
 
 \item{pop}{sf, centroids of a hectaraster population dataset covering the full extent of the 'aoi' input (column name for population must be 'n').}
 
 \item{n_sta}{numeric, number of the stations to place.}
+
+\item{poi}{sf, locations of the Points of Interest (POI), fixed stations (default = NULL).}
 
 \item{m_seg}{numeric, resolution of the road segmentation in meters.}
 

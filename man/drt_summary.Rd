@@ -2,26 +2,26 @@
 % Please edit documentation in R/drtm.R
 \name{drt_summary}
 \alias{drt_summary}
-\title{Reset the model state}
+\title{Print a summary of the model performance}
 \usage{
 drt_summary(obj, walking_limit = 10)
 }
 \arguments{
 \item{obj, }{drtm, a drtm model.}
 
-\item{shuffle, }{boolean, shuffle the initial station positions?}
+\item{walking_limit, }{numeric, walking time limit in minutes to split the summary.}
 }
 \value{
-The energy function of the model.
+None.
 }
 \description{
-Reset the model state
+Print a summary of the model performance
 }
 \examples{
 # Example model
 m <- drt_import(
-  system.file("Jegenstorf_i1000.RData", package = "drtplanr")
+  system.file("example_i1000.RData", package = "drtplanr")
 )
 
-drt_energy(m)
+drt_summary(m)
 }
