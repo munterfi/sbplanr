@@ -21,5 +21,5 @@ m <- drt_import(
   system.file("example_i1000.RData", package = "drtplanr")
 )
 
-drt_map(m)
+#drt_map(m)
 }

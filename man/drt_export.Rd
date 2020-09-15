@@ -25,6 +25,6 @@ m <- drt_import(
 )
 
 # Export to temporary dir
-drt_export(m, path = tempdir())
+#drt_export(m, path = tempdir())
 }
 }
