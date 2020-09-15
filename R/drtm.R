@@ -615,7 +615,7 @@ drt_energy.drtm = function(x) {
 #' )
 #'
 #' # Export to temporary dir
-#' #drt_export(m, path = tempdir())
+#' drt_export(m, path = tempdir())
 #' }
 drt_export = function(obj, path) UseMethod("drt_export")
 
@@ -759,7 +759,7 @@ drt_map.drtm <- function(obj) {
 #' )
 #'
 #' # Save to temp dir
-#' drt_save_graphics(m, path = tempdir())
+#' #drt_save_graphics(m, path = tempdir())
 drt_save_graphics = function(obj, path) UseMethod("drt_save_graphics")
 
 #' @export

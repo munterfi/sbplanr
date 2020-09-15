@@ -24,5 +24,5 @@ m <- drt_import(
 )
 
 # Save to temp dir
-drt_save_graphics(m, path = tempdir())
+#drt_save_graphics(m, path = tempdir())
 }
