@@ -60,7 +60,7 @@ drt_drtm <- function(model_name, aoi, pop, n_sta, poi = NULL, m_seg = 100,
 
   # Create routing graphs
   tmessage("Create routing graphs for 'walk', 'bicy' and 'mcar'")
-  roa <- roa[!roa$highway %in% c("platform", "proposed", NA), ]
+  roa <- roa[!roa$highway %in% c("platform", "proposed", "construction", NA), ]
   walk <- dodgr::weight_streetnet(roa, wt_profile = "foot")
   bicy <- dodgr::weight_streetnet(roa, wt_profile = "bicycle")
   mcar <- dodgr::weight_streetnet(roa, wt_profile = "motorcar")
