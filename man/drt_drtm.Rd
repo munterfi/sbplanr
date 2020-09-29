@@ -52,7 +52,7 @@ poi <-
 
 # Create model
 m <- drt_drtm(
-  model_name = "BÃ¼lach",
+  model_name = "Bülach",
   aoi = aoi, pop = pop, poi = poi,
   n_sta = 15, m_seg = 100
 )
