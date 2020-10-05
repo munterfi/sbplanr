@@ -314,6 +314,7 @@ drt_route_matrix <- function(orig, dest, graph) {
 #' @param pop sf, population point data.
 #' @param walk dodgr routing graph, graph to route walking times between the points.
 #' @param bicy dodgr routing graph, graph to route bicycle times between the points.
+#' @param od, data.table, precalculated walking OD matrix (default = NULL).
 #'
 #' @return
 #' A numeric scalar with the global energy.

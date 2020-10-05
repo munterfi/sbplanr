@@ -4,12 +4,12 @@
 \alias{drt_summary}
 \title{Print a summary of the model performance}
 \usage{
-drt_summary(obj, walking_limit = 10)
+drt_summary(obj, walking_limit = 5)
 }
 \arguments{
 \item{obj, }{drtm, a drtm model.}
 
-\item{walking_limit, }{numeric, walking time limit in minutes to split the summary.}
+\item{walking_limit, }{numeric, walking time limit in minutes to split the summary (default = 5).}
 }
 \value{
 None.
