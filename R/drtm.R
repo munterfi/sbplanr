@@ -34,7 +34,7 @@
 #' m <- drt_drtm(
 #'   model_name = "Bülach",
 #'   aoi = aoi, pop = pop, poi = poi,
-#'   n_sta = 15, m_seg = 100
+#'   n_sta = 15, m_seg = 500
 #' )
 #' m
 drt_drtm <- function(model_name, aoi, pop, n_sta, poi = NULL, m_seg = 100,
@@ -314,7 +314,9 @@ drt_route_matrix <- function(orig, dest, graph) {
 #' @param pop sf, population point data.
 #' @param walk dodgr routing graph, graph to route walking times between the points.
 #' @param bicy dodgr routing graph, graph to route bicycle times between the points.
-#' @param od, data.table, precalculated walking OD matrix (default = NULL).
+#' @param rts_walk, data.table, precalculated walking to station routes; OD matrix (default = NULL).
+#' @param rts_bicy, data.table, precalculated station to station bicycle routes; OD matrix (default = NULL).
+#' @param od, data.table, precalculated direct walking routes; OD matrix (default = NULL).
 #'
 #' @return
 #' A numeric scalar with the global energy.
@@ -336,24 +338,31 @@ drt_route_matrix <- function(orig, dest, graph) {
 #'
 #' # Global energy
 #' calculate_energy(idx, seg, pop, walk, bicy)
-calculate_energy <- function(idx, seg, pop, walk, bicy, od = NULL) {
+calculate_energy <- function(idx, seg, pop, walk, bicy,
+                             rts_walk = NULL, rts_bicy = NULL, od = NULL) {
 
   # Walking time from population to station, service area per station
-  rts_walk <- drt_route_matrix(seg[idx, ], pop, graph = walk)
-  colnames(rts_walk) <- c("station", "cent", "walking_time")
-  #rts_walk[walking_time > 7, walking_time := walking_time^2]
+  if (is.null(rts_walk)) {
+    rts_walk <- drt_route_matrix(seg[idx, ], pop, graph = walk)
+    colnames(rts_walk) <- c("station", "cent", "walking_time")
+  } else {
+    rts_walk <- rts_walk[station %in% idx, ]
+  }
   nn <- rts_walk[, .SD[which.min(walking_time)], by = list(cent)]
   nn$population <- pop[nn$cent, ]$n
 
   # Bicycle time between the stations
-  rts_bicy <- drt_route_matrix(seg[idx, ], seg[idx, ], graph = bicy)
-  colnames(rts_bicy) <- c("station1", "station2", "bicycle_time")
+  if (is.null(rts_bicy)) {
+    rts_bicy <- drt_route_matrix(seg[idx, ], seg[idx, ], graph = bicy)
+    colnames(rts_bicy) <- c("station1", "station2", "bicycle_time")
+  } else {
+    rts_bicy <- rts_bicy[station1 %in% idx & station2 %in% idx]
+  }
   rts_bicy[
     is.na(rts_bicy$bicycle_time),
     bicycle_time := max(rts_bicy$bicycle_time, na.rm = TRUE)*2]
-  #rts_bicy[bicycle_time < 3, bicycle_time := 3]
 
-  # All OD relations
+  # Population to population direct walking times
   if (is.null(od)) {
     od <- drt_route_matrix(pop, pop, graph = walk)
     colnames(od) <- c("cent1", "cent2", "walking_time")
@@ -387,6 +396,7 @@ calculate_energy <- function(idx, seg, pop, walk, bicy, od = NULL) {
 #'
 #' @param obj, drtm, a drtm model.
 #' @param n_iter numeric, number of iterations.
+#' @param precalculate, boolean, precalculate walking and cycling times? Speeds up iterations, but needs more memory (defaul = TRUE).
 #' @param annealing boolean, apply annealing (alpha = 1/(i+1)) (default = TRUE).
 #'
 #' @return
@@ -399,20 +409,37 @@ calculate_energy <- function(idx, seg, pop, walk, bicy, od = NULL) {
 #'   system.file("example_i1000.RData", package = "drtplanr")
 #' )
 #'
-#' drt_iterate(m, 10)
-drt_iterate = function(obj, n_iter, annealing = TRUE) UseMethod("drt_iterate")
+#' drt_iterate(m, 3)
+drt_iterate = function(obj, n_iter, precalculate = TRUE, annealing = TRUE) UseMethod("drt_iterate")
 
 #' @export
-drt_iterate.drtm <- function(obj, n_iter, annealing = TRUE) {
+drt_iterate.drtm <- function(obj, n_iter, precalculate = TRUE, annealing = TRUE) {
   tmessage("Minimize the global energy of the model")
   if (obj$params$n_sta == 0) {
     tmessage("No free stations available to place, set 'n_sta' at least at 1 in 'drt_drtm(...)'.")
     return(NULL)
   }
-  # Precalculate direct walking times
-  od <- drt_route_matrix(obj$layer$pop, obj$layer$pop, graph = obj$route$walk)
-  colnames(od) <- c("cent1", "cent2", "walking_time")
-  od <- od[cent1 != cent2, ]
+
+  # Precalculate routes
+  if (precalculate) {
+    # Population to station walking times
+    rts_walk <- drt_route_matrix(obj$layer$seg, obj$layer$pop, graph = obj$route$walk)
+    colnames(rts_walk) <- c("station", "cent", "walking_time")
+
+    # Station to station bicycle times
+    rts_bicy <- drt_route_matrix(obj$layer$seg, obj$layer$seg, graph = obj$route$bicy)
+    colnames(rts_bicy) <- c("station1", "station2", "bicycle_time")
+
+    # Direct walking population to population walking times
+    od <- drt_route_matrix(obj$layer$pop, obj$layer$pop, graph = obj$route$walk)
+    colnames(od) <- c("cent1", "cent2", "walking_time")
+    od <- od[cent1 != cent2, ]
+  } else {
+    rts_walk <- NULL
+    rts_bicy <- NULL
+    od <- NULL
+  }
+
   # Set up alpha for annealing
   alpha <- if (annealing) function(x) 1/(x + 1) else function(x) 0
   # Expand energy dt
@@ -431,7 +458,8 @@ drt_iterate.drtm <- function(obj, n_iter, annealing = TRUE) {
     obj$idx[idx_new_pos] <- idx_new
     e_new <- sum(
       obj$params$energy_function(
-        obj$idx, obj$layer$seg, obj$layer$pop, obj$route$walk, obj$route$bicy, od
+        obj$idx, obj$layer$seg, obj$layer$pop, obj$route$walk, obj$route$bicy,
+        rts_walk, rts_bicy, od
       )
     )
     cat(sprintf("\r  Iteration: %s, e0: %s, e1: %s \r",
@@ -738,6 +766,7 @@ drt_map.drtm <- function(obj) {
     stations <- rbind(stations, const)
     cols <- c("black", "blue", "red")
   }
+  mapview::mapviewOptions(fgb = FALSE)
   m <-
     mapview::mapview(
       obj$layer$aoi, alpha = 0.25, alpha.region = 0, color = "black", lwd = 2,
