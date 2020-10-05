@@ -14,7 +14,7 @@
 # =============================================================================
 
 library(drtplanr)
-set.seed(123)
+set.seed(1234)
 
 # Example data
 poi <-
@@ -30,7 +30,7 @@ pop <-
 m <- drt_drtm(
   model_name = "example",
   aoi = aoi, poi = poi, pop = pop,
-  n_sta = 15, m_seg = 100
+  n_sta = 15, m_seg = 500
 )
 m
 
