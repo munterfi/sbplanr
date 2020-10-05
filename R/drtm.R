@@ -32,7 +32,7 @@
 #'
 #' # Create model
 #' m <- drt_drtm(
-#'   model_name = "Bülach",
+#'   model_name = "example",
 #'   aoi = aoi, pop = pop, poi = poi,
 #'   n_sta = 15, m_seg = 500
 #' )
@@ -766,7 +766,6 @@ drt_map.drtm <- function(obj) {
     stations <- rbind(stations, const)
     cols <- c("black", "blue", "red")
   }
-  mapview::mapviewOptions(fgb = FALSE)
   m <-
     mapview::mapview(
       obj$layer$aoi, alpha = 0.25, alpha.region = 0, color = "black", lwd = 2,
