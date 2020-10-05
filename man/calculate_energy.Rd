@@ -4,7 +4,16 @@
 \alias{calculate_energy}
 \title{Global energy of the model}
 \usage{
-calculate_energy(idx, seg, pop, walk, bicy, od = NULL)
+calculate_energy(
+  idx,
+  seg,
+  pop,
+  walk,
+  bicy,
+  rts_walk = NULL,
+  rts_bicy = NULL,
+  od = NULL
+)
 }
 \arguments{
 \item{idx}{numeric, indices of candidates ins 'seg'.}
@@ -17,7 +26,11 @@ calculate_energy(idx, seg, pop, walk, bicy, od = NULL)
 
 \item{bicy}{dodgr routing graph, graph to route bicycle times between the points.}
 
-\item{od, }{data.table, precalculated walking OD matrix (default = NULL).}
+\item{rts_walk, }{data.table, precalculated walking to station routes; OD matrix (default = NULL).}
+
+\item{rts_bicy, }{data.table, precalculated station to station bicycle routes; OD matrix (default = NULL).}
+
+\item{od, }{data.table, precalculated direct walking routes; OD matrix (default = NULL).}
 }
 \value{
 A numeric scalar with the global energy.

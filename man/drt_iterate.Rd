@@ -4,12 +4,14 @@
 \alias{drt_iterate}
 \title{Iterate}
 \usage{
-drt_iterate(obj, n_iter, annealing = TRUE)
+drt_iterate(obj, n_iter, precalculate = TRUE, annealing = TRUE)
 }
 \arguments{
 \item{obj, }{drtm, a drtm model.}
 
 \item{n_iter}{numeric, number of iterations.}
+
+\item{precalculate, }{boolean, precalculate walking and cycling times? Speeds up iterations, but needs more memory (defaul = TRUE).}
 
 \item{annealing}{boolean, apply annealing (alpha = 1/(i+1)) (default = TRUE).}
 }

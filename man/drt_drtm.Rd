@@ -54,7 +54,7 @@ poi <-
 m <- drt_drtm(
   model_name = "Bülach",
   aoi = aoi, pop = pop, poi = poi,
-  n_sta = 15, m_seg = 100
+  n_sta = 15, m_seg = 500
 )
 m
 }
