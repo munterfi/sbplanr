@@ -27,5 +27,5 @@ m <- drt_import(
   system.file("example_i1000.RData", package = "drtplanr")
 )
 
-drt_iterate(m, 10)
+drt_iterate(m, 3)
 }
