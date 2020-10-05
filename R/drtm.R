@@ -335,7 +335,7 @@ drt_route_matrix <- function(orig, dest, graph) {
 #'
 #' # Global energy
 #' calculate_energy(idx, seg, pop, walk, bicy)
-calculate_energy <- function(idx, seg, pop, walk, bicy) {
+calculate_energy <- function(idx, seg, pop, walk, bicy, od = NULL) {
 
   # Walking time from population to station, service area per station
   rts_walk <- drt_route_matrix(seg[idx, ], pop, graph = walk)
@@ -353,9 +353,13 @@ calculate_energy <- function(idx, seg, pop, walk, bicy) {
   #rts_bicy[bicycle_time < 3, bicycle_time := 3]
 
   # All OD relations
-  od <- drt_route_matrix(pop, pop, graph = walk)
-  colnames(od) <- c("cent1", "cent2", "walking_time")
-  od <- od[cent1 != cent2, ]
+  if (is.null(od)) {
+    od <- drt_route_matrix(pop, pop, graph = walk)
+    colnames(od) <- c("cent1", "cent2", "walking_time")
+    od <- od[cent1 != cent2, ]
+  }
+
+  # Total OD
   od[,
      c("pop1", "pop2", "station1", "station2", "walk_to_s1", "walk_to_s2") := .(
        pop$n[cent1],
@@ -404,6 +408,10 @@ drt_iterate.drtm <- function(obj, n_iter, annealing = TRUE) {
     tmessage("No free stations available to place, set 'n_sta' at least at 1 in 'drt_drtm(...)'.")
     return(NULL)
   }
+  # Precalculate direct walking times
+  od <- drt_route_matrix(obj$layer$pop, obj$layer$pop, graph = obj$route$walk)
+  colnames(od) <- c("cent1", "cent2", "walking_time")
+  od <- od[cent1 != cent2, ]
   # Set up alpha for annealing
   alpha <- if (annealing) function(x) 1/(x + 1) else function(x) 0
   # Expand energy dt
@@ -421,7 +429,9 @@ drt_iterate.drtm <- function(obj, n_iter, annealing = TRUE) {
     idx_new <- .sample_exclude(1:obj$params$n_seg, 1, obj$idx)
     obj$idx[idx_new_pos] <- idx_new
     e_new <- sum(
-      obj$params$energy_function(obj$idx, obj$layer$seg, obj$layer$pop, obj$route$walk, obj$route$bicy)
+      obj$params$energy_function(
+        obj$idx, obj$layer$seg, obj$layer$pop, obj$route$walk, obj$route$bicy, od
+      )
     )
     cat(sprintf("\r  Iteration: %s, e0: %s, e1: %s \r",
                 i - 1, round(e_old, 1), round(e_new, 1)))
@@ -446,7 +456,7 @@ drt_iterate.drtm <- function(obj, n_iter, annealing = TRUE) {
 #' Print a summary of the model performance
 #'
 #' @param obj, drtm, a drtm model.
-#' @param walking_limit, numeric, walking time limit in minutes to split the summary.
+#' @param walking_limit, numeric, walking time limit in minutes to split the summary (default = 5).
 #'
 #' @return
 #' None.
@@ -460,10 +470,10 @@ drt_iterate.drtm <- function(obj, n_iter, annealing = TRUE) {
 #' )
 #'
 #' drt_summary(m)
-drt_summary = function(obj, walking_limit = 10) UseMethod("drt_summary")
+drt_summary = function(obj, walking_limit = 5) UseMethod("drt_summary")
 
 #' @export
-drt_summary.drtm = function(obj, walking_limit = 10) {
+drt_summary.drtm = function(obj, walking_limit = 5) {
   div <- "========================================"
   # Walking times from population to stations
   rts_walk <- drt_route_matrix(
@@ -477,7 +487,11 @@ drt_summary.drtm = function(obj, walking_limit = 10) {
   # Mean walking time to station
   mean_walking_time <- sum((nn$walking_time * nn$population)) / sum(nn$population)
   # Number of persons above and below limit
-  limit_walking_time <- nn[, list(n = sum(population)), by = list(walking_time > walking_limit)]
+  limit_walking_time <-
+    nn[,
+       list(n = sum(population)),
+       by = list(walking_time <= walking_limit)][
+         order(walking_time, decreasing = TRUE)][, n]/n_pop*100
   # Bicycling times from station to station
   rts_bicy <- drt_route_matrix(
     obj$layer$seg[obj$idx, ], obj$layer$seg[obj$idx, ], graph = obj$route$bicy
@@ -493,14 +507,17 @@ ________________________________________________________________________________
 Model energy                        : %.1f
 Population (residents and worker)   : %s
 Station accessibility, walking time : %.2f (avg.) [min/pop]
-                                      %.1f (t > %s min)   | %.1f (t < %s min) [%s]
+                                      %.1f (t <= %s min)   | %.1f (t > %s min) [%s]
 Station connectivity, cycling time  : %.2f (avg.) [min]
                                       %.2f (min.)         | %.2f (max.) [min]
   " %>% sprintf(div, div, obj$id,
                 obj$e[obj$i+1, ]$value,
                 n_pop,
                 mean_walking_time,
-                limit_walking_time$n[1]/n_pop*100, walking_limit, limit_walking_time$n[2]/n_pop*100, walking_limit, "%",
+                if (is.na(limit_walking_time[1])) 0 else limit_walking_time[1],
+                walking_limit,
+                if (is.na(limit_walking_time[2])) 0 else limit_walking_time[2],
+                walking_limit, "%",
                 mean_bicycle_time$me, mean_bicycle_time$mn, mean_bicycle_time$mx) %>%
     cat()
 }
