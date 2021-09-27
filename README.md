@@ -7,7 +7,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/munterfinger/sbplanr/badge)](https://www.codefactor.io/repository/github/munterfinger/sbplanr)
 <!-- badges: end -->
 
-Tool for placing bicycle sharing stations by iteratively minimizing a global energy of a model that reflects the station-based bicycle sharing system. The station locations are randomly initialized in the street network and iteratively optimized based on the reachable population in combination with walking and driving times.
+Tool for placing bicycle sharing stations by iteratively minimizing a global energy of a model that reflects the station-based bicycle sharing system. The station locations are randomly initialized in the street network and iteratively optimized based on the reachable population in combination with walking and driving times. Initially forked from [munterfinger/drtplanr](https://github.com/munterfinger/drtplanr).
 
 The model in the package example optimizes the positions of stations in an assumed bicycle sharing service for the municipality Bülach in Zurich, Switzerland.
 
@@ -83,6 +83,7 @@ The concept of sometimes allowing a bad candidate to be accepted is known as ann
 * David Masson (ideas and feedback on model optimization, annealing) - [panhypersebastos](https://github.com/panhypersebastos)
 
 ## References
+* Initially forked from [munterfinger/drtplanr](https://github.com/munterfinger/drtplanr)
 * [hereR](https://github.com/munterfinger/hereR): R interface to the HERE REST APIs
 * [BfS](https://www.bfs.admin.ch/): Population data for Switzerland
 * [OSM](https://www.openstreetmap.org/): Street network data for routing purposes.
