@@ -11,7 +11,7 @@ Tool for placing bicycle sharing stations by iteratively minimizing a global ene
 
 The model in the package example optimizes the positions of stations in an assumed bicycle sharing service for the municipality Bülach in Zurich, Switzerland.
 
-|![](https://github.com/munterfinger/sbplanr/blob/feature/monamo/docs/example_i1000_energy_plot.png)|![](https://github.com/munterfinger/sbplanr/blob/feature/monamo/docs/example_i1000_station_map.png)|
+|![](https://github.com/munterfinger/sbplanr/blob/master/docs/example_i1000_energy_plot.png)|![](https://github.com/munterfinger/sbplanr/blob/master/docs/example_i1000_station_map.png)|
 |---|---|
 
 ## Getting started
