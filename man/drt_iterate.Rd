@@ -4,12 +4,16 @@
 \alias{drt_iterate}
 \title{Iterate}
 \usage{
-drt_iterate(obj, n_iter)
+drt_iterate(obj, n_iter, precalculate = TRUE, annealing = TRUE)
 }
 \arguments{
 \item{obj, }{drtm, a drtm model.}
 
 \item{n_iter}{numeric, number of iterations.}
+
+\item{precalculate, }{boolean, precalculate walking and cycling times? Speeds up iterations, but needs more memory (defaul = TRUE).}
+
+\item{annealing}{boolean, apply annealing (alpha = 1/(i+1)) (default = TRUE).}
 }
 \value{
 A new drtm with 'n_iter' times more iterations.
@@ -20,8 +24,8 @@ Minimize the gloabal energy of a drtm model.
 \examples{
 # Example model
 m <- drt_import(
-  system.file("Jegenstorf_i1000.RData", package="drtplanr")
+  system.file("example_i1000.RData", package = "drtplanr")
 )
 
-drt_iterate(m, 10)
+drt_iterate(m, 3)
 }
