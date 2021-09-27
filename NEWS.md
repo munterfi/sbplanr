@@ -1,14 +1,10 @@
-# drtplanr 0.0.0.9000
+# sbplanr 0.0.0.9000
 
-Experimental development version of the `drtplanr` package:
-Tool for placing virtual stations in demand-responsive transport systems in
-villages by defining and minimizing a global energy (`drtplanr`, name is
-inspired by [stplanr](https://github.com/ropensci/stplanr)). The station
-locations are randomly initialized in the street network and iteratively
-optimized based on the reachable population in combination with walking and
-driving times.
+Experimental development version of the `sbplanr` package (`sbplanr`, name is
+inspired by [stplanr](https://github.com/ropensci/stplanr)):
+Tool for placing bicycle sharing stations by iteratively minimizing a global energy of a model that reflects the station-based bicycle sharing system. The station locations are randomly initialized in the street network and iteratively optimized based on the reachable population in combination with walking and driving times.
 
-* Class `drtm` class: Demand-responsive transport model.
-* Interface to drtm class: `drt_*()` functions.
-* Package example: An assumed on-demand shuttle service for the community of
-Jegenstorf in Bern, Switzerland. 
+* Class `sbm` class: Demand-responsive transport model.
+* Interface to `sbm` class: `sb_*()` functions.
+* Package example: An assumed station-based bycicle sharing service for the community of
+Buelach in Zurich, Switzerland.

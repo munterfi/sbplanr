@@ -1,15 +1,14 @@
-Package: drtplanr
-Title: Experimental demand-responsive transport planner
-Version: 0.0.0.9002
+Package: sbplanr
+Title: Experimental station-based bicycle sharing planner
+Version: 0.0.0.9000
 Authors@R: 
     person("Merlin", "Unterfinger", role = c("aut", "cre"),
     email = "info@munterfinger.ch", comment = c(ORCID = "0000-0003-2020-2366"))
-Description: Tool for placing virtual stations in demand-responsive transport
-    systems in villages by defining and minimizing a global energy (\code{drtplanr},
-    name is inspired by \code{stplanr} <https://github.com/ropensci/stplanr>).
-    The station locations are randomly initialized in the street network and
-    iteratively optimized based on the reachable population in combination with
-    walking and driving times.
+Description: Tool for placing bicycle sharing stations by iteratively minimizing
+    a global energy of a model that reflects the station-based bicycle sharing
+    system. The station locations are randomly initialized in the street network
+    and iteratively optimized based on the reachable population in combination
+    with walking and driving times.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -27,13 +26,13 @@ Imports:
     sf (>= 0.9.3),
     units (>= 0.6.6)
 Suggests: 
-    hereR (>= 0.4.1),
-    knitr (>= 1.28),
-    rmarkdown (>= 2.1),
-    testthat (>= 2.3.2),
-    covr (>= 3.5.0)
+    hereR,
+    knitr,
+    rmarkdown,
+    testthat,
+    covr
 VignetteBuilder: knitr
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 RdMacros: lifecycle
-URL: https://github.com/munterfinger/drtplanr
-BugReports: https://github.com/munterfinger/drtplanr/issues
+URL: https://github.com/munterfinger/sbplanr
+BugReports: https://github.com/munterfinger/sbplanr/issues

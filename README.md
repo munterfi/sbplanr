@@ -1,24 +1,24 @@
 # Station-based bicycle sharing planner <img src="man/figures/logo.svg" align="right" alt="" width="120" />
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![R build status](https://github.com/munterfinger/drtplanr/workflows/R-CMD-check/badge.svg)](https://github.com/munterfinger/drtplanr/actions)
-[![pkgdown](https://github.com/munterfinger/drtplanr/workflows/pkgdown/badge.svg)](https://github.com/munterfinger/drtplanr/actions)
-[![Codecov test coverage](https://codecov.io/gh/munterfinger/drtplanr/branch/master/graph/badge.svg)](https://codecov.io/gh/munterfinger/drtplanr?branch=master)
-[![CodeFactor](https://www.codefactor.io/repository/github/munterfinger/drtplanr/badge)](https://www.codefactor.io/repository/github/munterfinger/drtplanr)
+[![R build status](https://github.com/munterfinger/sbplanr/workflows/R-CMD-check/badge.svg)](https://github.com/munterfinger/sbplanr/actions)
+[![pkgdown](https://github.com/munterfinger/sbplanr/workflows/pkgdown/badge.svg)](https://github.com/munterfinger/sbplanr/actions)
+[![Codecov test coverage](https://codecov.io/gh/munterfinger/sbplanr/branch/master/graph/badge.svg)](https://codecov.io/gh/munterfinger/sbplanr?branch=master)
+[![CodeFactor](https://www.codefactor.io/repository/github/munterfinger/sbplanr/badge)](https://www.codefactor.io/repository/github/munterfinger/sbplanr)
 <!-- badges: end -->
 
 Tool for placing bicycle sharing stations by iteratively minimizing a global energy of a model that reflects the station-based bicycle sharing system. The station locations are randomly initialized in the street network and iteratively optimized based on the reachable population in combination with walking and driving times.
 
 The model in the package example optimizes the positions of stations in an assumed bicycle sharing service for the municipality Bülach in Zurich, Switzerland.
 
-|![](https://github.com/munterfinger/drtplanr/blob/feature/monamo/docs/example_i1000_energy_plot.png)|![](https://github.com/munterfinger/drtplanr/blob/feature/monamo/docs/example_i1000_station_map.png)|
+|![](https://github.com/munterfinger/sbplanr/blob/feature/monamo/docs/example_i1000_energy_plot.png)|![](https://github.com/munterfinger/sbplanr/blob/feature/monamo/docs/example_i1000_station_map.png)|
 |---|---|
 
 ## Getting started
-Install the development version from [GitHub](https://github.com/munterfinger/drtplanr/) with:
+Install the development version from [GitHub](https://github.com/munterfinger/sbplanr/) with:
 
 ``` r
-remotes::install_github("munterfinger/drtplanr@feature/monamo")
+remotes::install_github("munterfinger/sbplanr")
 ```
 
 Create an example model:
@@ -26,27 +26,27 @@ Create an example model:
 ``` r
 # Example data
 aoi <-
-  sf::st_read(system.file("example.gpkg", package = "drtplanr"), layer = "aoi")
+  sf::st_read(system.file("example.gpkg", package = "sbplanr"), layer = "aoi")
 
 pop <-
-  sf::st_read(system.file("example.gpkg", package = "drtplanr"), layer = "pop")
+  sf::st_read(system.file("example.gpkg", package = "sbplanr"), layer = "pop")
 
 poi <-
-  sf::st_read(system.file("example.gpkg", package = "drtplanr"), layer = "poi")[1,]
+  sf::st_read(system.file("example.gpkg", package = "sbplanr"), layer = "poi")[1,]
 
 # Create model
-m <- drt_drtm(
-  model_name = "BÃ¼lach",
+m <- sb_sbm(
+  model_name = "Buelach",
   aoi = aoi, pop = pop, poi = poi,
   n_sta = 15, m_seg = 100
 )
 
 # Iterate the model
-m1 <- drt_iterate(m, 100)
+m1 <- sb_iterate(m, 100)
 
 # Visualize results
-drt_plot(m)
-drt_map(m)
+sb_plot(m)
+sb_map(m)
 ```
 
 ## Structure of the model
