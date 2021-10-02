@@ -1,4 +1,4 @@
 library(testthat)
-library(drtplanr)
+library(sbplanr)
 
-test_check("drtplanr")
+test_check("sbplanr")

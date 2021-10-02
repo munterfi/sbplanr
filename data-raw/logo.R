@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 # -----------------------------------------------------------------------------
 # Name          :logo.R
-# Description   :Creates a hex sticker for the drtplanr package.
+# Description   :Creates a hex sticker for the sbplanr package.
 # Author        :Merlin Unterfinger <info@munterfinger.ch>
 # Date          :2020-05-25
 # Version       :0.1.0
@@ -10,7 +10,7 @@
 # Bash          :5.0.17
 # =============================================================================
 
-library(drtplanr)
+library(sbplanr)
 library(hexSticker)
 library(ggplot2)
 library(sf)
@@ -23,8 +23,8 @@ color2 <- "#C26665"
 color3 <- "#FFFFFF"
 
 # Load model
-m <- drt_import(
-  system.file("example_i1000.RData", package = "drtplanr")
+m <- sb_import(
+  system.file("example_i1000.RData", package = "sbplanr")
 )
 
 # Bounding box for plot
@@ -59,12 +59,12 @@ p <-
   theme_void() +
   coord_sf(xlim = c(bbox[1], bbox[3]), ylim = c(bbox[2], bbox[4])) +
   scale_color_gradient(low = color2, high = color1) +
-  guides(shape = FALSE, fill = FALSE, color = FALSE)
+  guides(shape = "none", fill = "none", color = "none")
 
 # Sticker
 sticker(p, package = "", p_size = 12,
-        s_x = 1, s_y = 1.1, s_width = 1.9, s_height = 1.9,
+        s_x = 1.2, s_y = 1.1, s_width = 1.9, s_height = 1.9,
         h_fill = color1, h_color = color2,
         filename = outfile, white_around_sticker = FALSE,
-        url = "drtplanr", u_color = color3,
+        url = "sbplanr", u_color = color3,
         u_x = 0.95, u_y = 0.2, u_size = 6, u_angle = 30)
