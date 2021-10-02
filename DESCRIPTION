@@ -4,6 +4,8 @@ Version: 0.0.0.9000
 Authors@R: 
     person("Merlin", "Unterfinger", role = c("aut", "cre"),
     email = "info@munterfinger.ch", comment = c(ORCID = "0000-0003-2020-2366"))
+URL: https://github.com/munterfi/sbplanr/
+BugReports: https://github.com/munterfi/sbplanr/issues/
 Description: Tool for placing bicycle sharing stations by iteratively minimizing
     a global energy of a model that reflects the station-based bicycle sharing
     system. The station locations are randomly initialized in the street network
@@ -34,5 +36,3 @@ Suggests:
 VignetteBuilder: knitr
 RoxygenNote: 7.1.2
 RdMacros: lifecycle
-URL: https://github.com/munterfinger/sbplanr
-BugReports: https://github.com/munterfinger/sbplanr/issues

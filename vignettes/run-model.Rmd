@@ -138,7 +138,7 @@ sb_save_graphics(m2, path = getwd())
 ```
 
 ## References
-* [hereR](https://github.com/munterfinger/hereR): R interface to the HERE REST APIs 
+* [hereR](https://github.com/munterfi/hereR): R interface to the HERE REST APIs 
 * [BfS](https://www.bfs.admin.ch/): Population data for Switzerland
 * [OSM](https://www.openstreetmap.org/): Street network data for routing purposes.
 

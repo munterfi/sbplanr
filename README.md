@@ -1,24 +1,25 @@
 # Station-based bicycle sharing planner <img src="man/figures/logo.svg" align="right" alt="" width="120" />
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![R build status](https://github.com/munterfinger/sbplanr/workflows/R-CMD-check/badge.svg)](https://github.com/munterfinger/sbplanr/actions)
-[![pkgdown](https://github.com/munterfinger/sbplanr/workflows/pkgdown/badge.svg)](https://github.com/munterfinger/sbplanr/actions)
-[![Codecov test coverage](https://codecov.io/gh/munterfinger/sbplanr/branch/master/graph/badge.svg)](https://codecov.io/gh/munterfinger/sbplanr?branch=master)
-[![CodeFactor](https://www.codefactor.io/repository/github/munterfinger/sbplanr/badge)](https://www.codefactor.io/repository/github/munterfinger/sbplanr)
+[![R build status](https://github.com/munterfi/sbplanr/workflows/R-CMD-check/badge.svg)](https://github.com/munterfi/sbplanr/actions)
+[![pkgdown](https://github.com/munterfi/sbplanr/workflows/pkgdown/badge.svg)](https://github.com/munterfi/sbplanr/actions)
+[![Codecov test coverage](https://codecov.io/gh/munterfi/sbplanr/branch/master/graph/badge.svg)](https://codecov.io/gh/munterfi/sbplanr?branch=master)
+[![CodeFactor](https://www.codefactor.io/repository/github/munterfi/sbplanr/badge)](https://www.codefactor.io/repository/github/munterfi/sbplanr)
 <!-- badges: end -->
 
-Tool for placing bicycle sharing stations by iteratively minimizing a global energy of a model that reflects the station-based bicycle sharing system. The station locations are randomly initialized in the street network and iteratively optimized based on the reachable population in combination with walking and driving times. Initially forked from [munterfinger/drtplanr](https://github.com/munterfinger/drtplanr).
+Tool for placing bicycle sharing stations by iteratively minimizing a global energy of a model that reflects the station-based bicycle sharing system. The station locations are randomly initialized in the street network and iteratively optimized based on the reachable population in combination with walking and driving times. Initially forked from [munterfi/drtplanr](https://github.com/munterfi/drtplanr).
 
 The model in the package example optimizes the positions of stations in an assumed bicycle sharing service for the municipality Bülach in Zurich, Switzerland.
 
-|![](https://github.com/munterfinger/sbplanr/blob/master/docs/example_i1000_energy_plot.png)|![](https://github.com/munterfinger/sbplanr/blob/master/docs/example_i1000_station_map.png)|
+|![](https://github.com/munterfi/sbplanr/blob/master/docs/example_i1000_energy_plot.png)|![](https://github.com/munterfi/sbplanr/blob/master/docs/example_i1000_station_map.png)|
 |---|---|
 
 ## Getting started
-Install the development version from [GitHub](https://github.com/munterfinger/sbplanr/) with:
+
+Install the development version from [GitHub](https://github.com/munterfi/sbplanr/) with:
 
 ``` r
-remotes::install_github("munterfinger/sbplanr")
+remotes::install_github("munterfi/sbplanr")
 ```
 
 Create an example model:
@@ -50,7 +51,9 @@ sb_map(m)
 ```
 
 ## Structure of the model
+
 ### Input layers
+
 The model is set up with the following inputs:
 
 * **Spatial layer**:
@@ -71,6 +74,7 @@ Function that calculates the global energy of the current model state. The aim i
 When the direct walking time between to populations is faster than the travel using the bicycle (walk to station, cycle, walk from station), than the direct walking travel is chosen.
 
 ### Optimization
+
 The global energy of the model is optimized in iterations. In every iteration one station is randomly selected and moved to another position on the segmented street network. The global energy of the model state with the new candidate is calculated. If the global energy is lower as befor, the candidate is accepted and the next iteration starts. If the global energy is higher, the candidate is rejected with the probability $1-\alpha$. The probability $\alpha$ decreases exponentially as a function of the number of iterations ($i$):
 
 <img src="https://render.githubusercontent.com/render/math?math=f(i) = \frac{1}{(i + 1)}">
@@ -78,15 +82,18 @@ The global energy of the model is optimized in iterations. In every iteration on
 The concept of sometimes allowing a bad candidate to be accepted is known as annealing. This technique prevents the optimization from being captured in a local minimum before the global minimum is reached.
 
 ## Authors
-* Merlin Unterfinger (inital idea, package implementation) - [munterfinger](https://github.com/munterfinger)
+
+* Merlin Unterfinger (inital idea, package implementation) - [munterfi](https://github.com/munterfi)
 * Thomas Hettinger (energy definition) - [thetti](https://github.com/thetti)
 * David Masson (ideas and feedback on model optimization, annealing) - [panhypersebastos](https://github.com/panhypersebastos)
 
 ## References
-* Initially forked from [munterfinger/drtplanr](https://github.com/munterfinger/drtplanr)
-* [hereR](https://github.com/munterfinger/hereR): R interface to the HERE REST APIs
+
+* Initially forked from [munterfi/drtplanr](https://github.com/munterfi/drtplanr)
+* [hereR](https://github.com/munterfi/hereR): R interface to the HERE REST APIs
 * [BfS](https://www.bfs.admin.ch/): Population data for Switzerland
 * [OSM](https://www.openstreetmap.org/): Street network data for routing purposes.
 
 ## Licence
+
 * This repository is licensed under the GNU General Public License v3.0 - see the [LICENSE.md](LICENSE.md) file for details.

@@ -15,8 +15,8 @@ Tool for placing bicycle sharing stations by iteratively minimizing
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/munterfinger/sbplanr}
-  \item Report bugs at \url{https://github.com/munterfinger/sbplanr/issues}
+  \item \url{https://github.com/munterfi/sbplanr/}
+  \item Report bugs at \url{https://github.com/munterfi/sbplanr/issues/}
 }
 
 }
