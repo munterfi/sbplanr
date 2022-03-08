@@ -6,7 +6,6 @@
 [![R build status](https://github.com/munterfi/sbplanr/workflows/R-CMD-check/badge.svg)](https://github.com/munterfi/sbplanr/actions)
 [![pkgdown](https://github.com/munterfi/sbplanr/workflows/pkgdown/badge.svg)](https://github.com/munterfi/sbplanr/actions)
 [![Codecov test coverage](https://codecov.io/gh/munterfi/sbplanr/branch/master/graph/badge.svg)](https://codecov.io/gh/munterfi/sbplanr?branch=master)
-[![CodeFactor](https://www.codefactor.io/repository/github/munterfi/sbplanr/badge)](https://www.codefactor.io/repository/github/munterfi/sbplanr)
 
 <!-- badges: end -->
 
