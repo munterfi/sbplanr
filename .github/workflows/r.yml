@@ -29,6 +29,9 @@ jobs:
           r-version: ${{ matrix.r-version }}
       - name: Install dependencies
         run: |
+          brew install pandoc
+      - name: Install dependencies
+        run: |
           install.packages(c("remotes", "rcmdcheck"))
           remotes::install_deps(dependencies = TRUE, type = "binary")
         shell: Rscript {0}
