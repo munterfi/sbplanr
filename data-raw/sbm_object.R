@@ -35,10 +35,10 @@ m <- sb_sbm(
 m
 
 # Iterate
-m <- drt_iterate(m, 1000)
+m <- sb_iterate(m, 1000)
 
 # Export
-drt_export(m, paste0(getwd(), "/inst"))
+sb_export(m, paste0(getwd(), "/inst"))
 
 # Save graphics
-drt_save_graphics(m, paste0(getwd(), "/docs"))
+sb_save_graphics(m, paste0(getwd(), "/docs"))
