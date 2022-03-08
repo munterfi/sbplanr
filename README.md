@@ -46,7 +46,7 @@ m <- sb_sbm(
 )
 
 # Iterate the model
-m1 <- sb_iterate(m, 100)
+m <- sb_iterate(m, 100)
 
 # Visualize results
 sb_plot(m)
