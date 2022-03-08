@@ -59,13 +59,13 @@ sb_map(m)
 The model is set up with the following inputs:
 
 * **Spatial layer**:
-  * Area of Interest (POLYGON)
-  * Population raster centroids (POINT)
-  * Point(s) of Interest (POINT)
+  * Area of Interest (POLYGON).
+  * Population raster centroids (POINT).
+  * Point(s) of Interest (POINT).
 * **Parameters**:
-  * A model name
+  * A model name.
   * Distance in meters to segment the street network for candidate creation: default = 100m (The value is equivalent to the minimum possible distance between two stations on the street network).
-  * Number of stations to place
+  * Number of stations to place.
 
 ### Global energy
 
