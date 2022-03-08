@@ -1,9 +1,11 @@
 Package: sbplanr
 Title: Experimental station-based bicycle sharing planner
 Version: 0.0.0.9000
-Authors@R: 
+Authors@R: c(
     person("Merlin", "Unterfinger", role = c("aut", "cre"),
-    email = "info@munterfinger.ch", comment = c(ORCID = "0000-0003-2020-2366"))
+    email = "info@munterfinger.ch", comment = c(ORCID = "0000-0003-2020-2366")),
+    person("Thomas", "Hettinger", role = "ctb"),
+    person("David", "Masson", role = "ctb"))
 URL: https://github.com/munterfi/sbplanr/
 BugReports: https://github.com/munterfi/sbplanr/issues/
 Description: Tool for placing bicycle sharing stations by iteratively minimizing
