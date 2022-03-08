@@ -48,3 +48,5 @@ config.json
 *.html
 .Rproj.user
 inst/doc
+/doc/
+/Meta/
