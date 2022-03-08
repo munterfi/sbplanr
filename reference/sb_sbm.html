@@ -155,13 +155,15 @@ OSM data a routing graph for walking and driving is created.</p>
 <span class="r-in">  aoi <span class="op">=</span> <span class="va">aoi</span>, pop <span class="op">=</span> <span class="va">pop</span>, poi <span class="op">=</span> <span class="va">poi</span>,</span>
 <span class="r-in">  n_sta <span class="op">=</span> <span class="fl">15</span>, m_seg <span class="op">=</span> <span class="fl">500</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2022-03-08 16:09:52 Get data from OSM: Streets 'roa'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2022-03-08 16:09:55 Create routing graphs for 'walk', 'bicy' and 'mcar'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2022-03-08 16:10:03 Mask layers 'roa', 'pop' by 'aoi'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2022-03-08 16:10:03 Extract possible station locations 'seg' from street segments</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2022-03-08 16:21:17 Get data from OSM: Streets 'roa'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Error in curl::curl_fetch_memory(url, handle = handle): HTTP/2 stream 0 was not closed cleanly: PROTOCOL_ERROR (err 1)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Request failed [ERROR]. Retrying in 1 seconds...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2022-03-08 16:21:24 Create routing graphs for 'walk', 'bicy' and 'mcar'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2022-03-08 16:21:34 Mask layers 'roa', 'pop' by 'aoi'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2022-03-08 16:21:35 Extract possible station locations 'seg' from street segments</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>package ‘sf’ was built under R version 4.1.2</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Linking to GEOS 3.9.1, GDAL 3.4.0, PROJ 8.1.1; sf_use_s2() is TRUE</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2022-03-08 16:10:11 Process 'poi' layer, map to segments 'seg' and set as constant</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2022-03-08 16:21:44 Process 'poi' layer, map to segments 'seg' and set as constant</span>
 <span class="r-in"><span class="va">m</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ================================================================================</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Station-based bicycle sharing model 'example'</span>
@@ -169,7 +171,7 @@ OSM data a routing graph for walking and driving is created.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ______________________________________ i __________________ dE/di ______________</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Iteration:                                                0                  NaN</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ______________________________________ initial ____________ current ____________</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Energy:                                        6208445009.3         6208445009.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Energy:                                        6042341212.2         6042341212.2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ______________________________________ constant ___________ variable ___________</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Stations:                                                 1                   15</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ______________________________________ lng ________________ lat ________________</span>
