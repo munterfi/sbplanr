@@ -1,35 +1,35 @@
 #!/usr/bin/env Rscript
 # -----------------------------------------------------------------------------
-# Name          :04_drtm_object.R
-# Description   :Creates a 'drtm' object and saves them to 'inst'.
+# Name          :sbm_object.R
+# Description   :Creates a 'sbm' object and saves them to 'inst'.
 # Author        :Merlin Unterfinger <info@munterfinger.ch>
-# Date          :2020-05-23
+# Date          :2022-03-08
 # Version       :0.1.0
-# Usage         :./04_drtm_object.R
+# Usage         :./sbm_object.R
 # Notes         :Load from package examples using:
-#                m <- drt_import(
-#                  system.file("example.RData", package="drtplanr")
+#                m <- sb_import(
+#                  system.file("example_i1000.RData", package = "sbplanr")
 #                )
 # R             :4.0.0
 # =============================================================================
 
-library(drtplanr)
+library(sbplanr)
 set.seed(1234)
 
 # Example data
-poi <-
-  sf::st_read(system.file("example.gpkg", package = "drtplanr"), layer = "poi")[1, ]
-
 aoi <-
-  sf::st_read(system.file("example.gpkg", package = "drtplanr"), layer = "aoi")
+  sf::st_read(system.file("example.gpkg", package = "sbplanr"), layer = "aoi")
 
 pop <-
-  sf::st_read(system.file("example.gpkg", package = "drtplanr"), layer = "pop")
+  sf::st_read(system.file("example.gpkg", package = "sbplanr"), layer = "pop")
+
+poi <-
+  sf::st_read(system.file("example.gpkg", package = "sbplanr"), layer = "poi")[1, ]
 
 # Create model
-m <- drt_drtm(
+m <- sb_sbm(
   model_name = "example",
-  aoi = aoi, poi = poi, pop = pop,
+  aoi = aoi, pop = pop, poi = poi,
   n_sta = 15, m_seg = 500
 )
 m
