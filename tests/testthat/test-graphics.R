@@ -10,5 +10,4 @@ test_that("graphics works", {
 
   # Test station map
   expect_is(sb_map(m), "mapview")
-
 })

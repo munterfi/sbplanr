@@ -59,7 +59,14 @@ sb_sbm <- function(model_name, aoi, pop, n_sta, poi = NULL, m_seg = 100,
   # Get OSM data
   tmessage("Get data from OSM: Streets 'roa'")
   bb <- aoi %>% sb_osm_bb()
-  roa <- dodgr::dodgr_streetnet(bbox = bb)
+
+  # Workaround due to: Query timed out in "query" at line 3 after 26 seconds.
+  # roa <- dodgr::dodgr_streetnet(bbox = bb)
+  net <- osmdata::opq(bb) %>%
+    osmdata::add_osm_feature(key = "highway") %>%
+    osmdata::osmdata_sf() %>%
+    osmdata::osm_poly2line()
+  roa <- net$osm_lines
 
   # Create routing graphs
   tmessage("Create routing graphs for 'walk', 'bicy' and 'mcar'")
@@ -777,6 +784,8 @@ sb_map <- function(obj) UseMethod("sb_map")
 #' @export
 sb_map.sbm <- function(obj) {
   tmessage("Print station map")
+  # Deactivate fgb since cex size does not work...
+  mapview::mapviewOptions(fgb = FALSE)
   start <- obj$layer$seg[obj$idx_start[!obj$idx_start %in% obj$idx_const], ]
   if (nrow(start)) {
     start$station <- "Initial"
@@ -816,7 +825,9 @@ sb_map.sbm <- function(obj) {
     mapview::mapview(
       stations,
       alpha = 0, zcol = "station",
-      cex = stations$size, col.regions = cols,
+      cex = "size",
+      min.rad = min(stations$size), max.rad = max(stations$size),
+      col.regions = cols,
       layer.name = "Stations", homebutton = FALSE
     )
   m

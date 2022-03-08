@@ -1,10 +1,13 @@
 # Station-based bicycle sharing planner <img src="man/figures/logo.svg" align="right" alt="" width="120" />
+
 <!-- badges: start -->
+
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![R build status](https://github.com/munterfi/sbplanr/workflows/R-CMD-check/badge.svg)](https://github.com/munterfi/sbplanr/actions)
 [![pkgdown](https://github.com/munterfi/sbplanr/workflows/pkgdown/badge.svg)](https://github.com/munterfi/sbplanr/actions)
 [![Codecov test coverage](https://codecov.io/gh/munterfi/sbplanr/branch/master/graph/badge.svg)](https://codecov.io/gh/munterfi/sbplanr?branch=master)
 [![CodeFactor](https://www.codefactor.io/repository/github/munterfi/sbplanr/badge)](https://www.codefactor.io/repository/github/munterfi/sbplanr)
+
 <!-- badges: end -->
 
 Tool for placing bicycle sharing stations by iteratively minimizing a global energy of a model that reflects the station-based bicycle sharing system. The station locations are randomly initialized in the street network and iteratively optimized based on the reachable population in combination with walking and driving times. Initially forked from [munterfi/drtplanr](https://github.com/munterfi/drtplanr).
@@ -18,13 +21,13 @@ The model in the package example optimizes the positions of stations in an assum
 
 Install the development version from [GitHub](https://github.com/munterfi/sbplanr/) with:
 
-``` r
+```r
 remotes::install_github("munterfi/sbplanr")
 ```
 
 Create an example model:
 
-``` r
+```r
 # Example data
 aoi <-
   sf::st_read(system.file("example.gpkg", package = "sbplanr"), layer = "aoi")

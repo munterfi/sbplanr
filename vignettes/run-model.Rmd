@@ -28,37 +28,36 @@ Tool for placing bicycle sharing stations by iteratively minimizing a global ene
 The model in the package example optimizes the positions of stations in an assumed bicycle sharing service for the municipality Bülach in Zurich, Switzerland.
 
 ## Setup
+
 ```{r }
 library(sbplanr)
 set.seed(123)
 ```
 
 ## Example data sets
+
 Load the package example data sets:
 
-* aoi: Area of Interest - boundary of the municipality Bülach in Zurich, Switzerland.
-* pop: Centroids of population and structural business hectare grid statistis (BfS).
-* poi: Points od Interest - manually selected points to place a (fixed) station.
+- aoi: Area of Interest - boundary of the municipality Bülach in Zurich, Switzerland.
+- pop: Centroids of population and structural business hectare grid statistis (BfS).
+- poi: Points od Interest - manually selected points to place a (fixed) station.
 
-```{r eval=TRUE, out.width='100%'}
-aoi <- 
+```{r eval=FALSE, out.width='100%'}
+aoi <-
   sf::st_read(system.file("example.gpkg", package = "sbplanr"), layer = "aoi")
 
-pop <- 
+pop <-
   sf::st_read(system.file("example.gpkg", package = "sbplanr"), layer = "pop")
 
 poi <-
   sf::st_read(system.file("example.gpkg", package = "sbplanr"), layer = "poi")
-
-#m <-
-#  mapview(aoi, alpha.region = 0, layer.name = "AOI", homebutton = FALSE) +
-#  mapview(pop, zcol = "n", alpha = 0, layer.name = "Population", homebutton = FALSE)
-#m
 ```
 
 ## Initialize sbm model
+
 Create a new model.
-```{r }
+
+```{r eval=FALSE}
 m <- sb_sbm(
   model_name = "example",
   aoi = aoi, poi = poi, pop = pop,
@@ -67,7 +66,15 @@ m <- sb_sbm(
 m
 ```
 
+```{r eval=TRUE, echo=FALSE, out.width='100%'}
+m <- sb_import(
+  system.file("example_i1000.RData", package = "sbplanr")
+)
+m
+```
+
 ## Minimze the energy of the model
+
 Iterate the model 100 times, where every iteration consists of:
 
 1. Relocate a station randomly on the street segments.
@@ -83,23 +90,29 @@ m1 <- sb_iterate(m, 10)
 ```
 
 Print model summary:
+
 ```{r out.width='100%'}
 m1
 ```
 
 ## Plotting
+
 ### Energy curve
+
 ```{r out.width='100%'}
 sb_plot(m1)
 ```
 
 ### Station map
+
 ```{r eval=FALSE, out.width='100%'}
 #sb_map(m1)
 ```
 
 ## Iterate again
+
 The model state is saved in the model. This allows making copies and store different stages of the optimization.
+
 ```{r include=FALSE, out.width='100%'}
 m2 <- sb_import(
   system.file("example_i1000.RData", package = "sbplanr")
@@ -111,11 +124,13 @@ m2 <- sb_iterate(m1, 990)
 ```
 
 Print model summary:
+
 ```{r out.width='100%'}
 m2
 ```
 
 ## Visualize results
+
 ```{r out.width='100%'}
 sb_plot(m2)
 ```
@@ -125,7 +140,9 @@ sb_plot(m2)
 ```
 
 ## Export and import
+
 The sbplanr has functions to import and export the sbm objects. Furthermore graphics of the energy plot and the station map can be exported as images (.png).
+
 ```{r eval=FALSE, out.width='100%'}
 # Export model
 sb_export(m2, path = getwd())
@@ -138,7 +155,7 @@ sb_save_graphics(m2, path = getwd())
 ```
 
 ## References
-* [hereR](https://github.com/munterfi/hereR): R interface to the HERE REST APIs 
+
+* [hereR](https://github.com/munterfi/hereR): R interface to the HERE REST APIs
 * [BfS](https://www.bfs.admin.ch/): Population data for Switzerland
 * [OSM](https://www.openstreetmap.org/): Street network data for routing purposes.
-

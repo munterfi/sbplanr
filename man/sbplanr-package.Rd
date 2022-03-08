@@ -6,11 +6,7 @@
 \alias{sbplanr-package}
 \title{sbplanr: Experimental station-based bicycle sharing planner}
 \description{
-Tool for placing bicycle sharing stations by iteratively minimizing
-    a global energy of a model that reflects the station-based bicycle sharing
-    system. The station locations are randomly initialized in the street network
-    and iteratively optimized based on the reachable population in combination
-    with walking and driving times.
+Tool for placing bicycle sharing stations by iteratively minimizing a global energy of a model that reflects the station-based bicycle sharing system. The station locations are randomly initialized in the street network and iteratively optimized based on the reachable population in combination with walking and driving times.
 }
 \seealso{
 Useful links:

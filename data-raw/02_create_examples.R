@@ -24,7 +24,7 @@
 args <- commandArgs(trailingOnly = TRUE)
 
 # test if there is at least one argument: if not, return an error
-if (length(args)==0) {
+if (length(args) == 0) {
   stop("At least one argument must be supplied (HERE API key).n", call. = FALSE)
 }
 
@@ -51,7 +51,7 @@ sta <-
 # Create isochrone around the station by a 3 1/4 min car drive
 aoi <-
   sta[2, ] %>%
-  isoline(mode = "car", range = 3.25*60, traffic = FALSE)
+  isoline(mode = "car", range = 3.25 * 60, traffic = FALSE)
 aoi$id <- 1
 
 # Save to GeoPackage
@@ -68,16 +68,20 @@ statpop <-
 
 # Move centroids to center of the hectares
 statent[, c("id", "x", "y", "statent") := .(
-  paste0(E_KOORD, "_", N_KOORD), E_KOORD + 50, N_KOORD + 50, B1708T)]
+  paste0(E_KOORD, "_", N_KOORD), E_KOORD + 50, N_KOORD + 50, B1708T
+)]
 statpop[, c("id", "x", "y", "statpop") := .(
-  paste0(E_KOORD, "_", N_KOORD), E_KOORD + 50, N_KOORD + 50, B18BTOT)]
+  paste0(E_KOORD, "_", N_KOORD), E_KOORD + 50, N_KOORD + 50, B18BTOT
+)]
 
 # Merge datasets and replace NAs
 pop <-
   statent %>%
   merge(statpop, by = "id", all = TRUE) %>%
   .[, .(id, statent, statpop)] %>%
-  .[, lapply(.SD, function(x) {ifelse(is.na(x), 0, x)})]
+  .[, lapply(.SD, function(x) {
+    ifelse(is.na(x), 0, x)
+  })]
 
 # Retrieve coords
 pop[, c("x", "y") := tstrsplit(`id`, "_", fixed = TRUE)]

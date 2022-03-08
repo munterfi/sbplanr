@@ -2,13 +2,16 @@ test_that("sbm works", {
   # Example data
   poi <-
     sf::st_read(system.file("example.gpkg", package = "sbplanr"),
-                layer = "poi", quiet = TRUE)[1, ]
+      layer = "poi", quiet = TRUE
+    )[1, ]
   aoi <-
     sf::st_read(system.file("example.gpkg", package = "sbplanr"),
-                layer = "aoi", quiet = TRUE)
+      layer = "aoi", quiet = TRUE
+    )
   pop <-
     sf::st_read(system.file("example.gpkg", package = "sbplanr"),
-                layer = "pop", quiet = TRUE)
+      layer = "pop", quiet = TRUE
+    )
 
   # Create model
   m <- sb_sbm(
@@ -24,7 +27,7 @@ test_that("sbm works", {
   expect_equal(length(m), 9)
 
   # Iterate model with precalculation
-  i = 3
+  i <- 3
   m_tt <- sb_iterate(m, i, precalculate = TRUE, annealing = TRUE)
   m_tf <- sb_iterate(m, i, precalculate = TRUE, annealing = FALSE)
 
@@ -37,5 +40,4 @@ test_that("sbm works", {
   expect_equal(m_tf$i, i)
   expect_equal(m_ft$i, i)
   expect_equal(m_ff$i, i)
-
 })

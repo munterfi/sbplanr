@@ -7,4 +7,4 @@ Tool for placing bicycle sharing stations by iteratively minimizing a global ene
 * Class `sbm` class: Demand-responsive transport model.
 * Interface to `sbm` class: `sb_*()` functions.
 * Package example: An assumed station-based bycicle sharing service for the community of
-Buelach in Zurich, Switzerland.
+  Buelach in Zurich, Switzerland.
